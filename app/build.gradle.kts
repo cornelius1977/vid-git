@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.bugs.vidplayer"
-    compileSdk = 36 // Configuración estándar y limpia para Android 15/16
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.bugs.vidplayer"
@@ -19,7 +19,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false // Sintaxis correcta para deshabilitar optimización básica
+            isMinifyEnabled = false
         }
     }
     compileOptions {
@@ -42,6 +42,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    // Librerías de Coroutines para habilitar Flow (MutableStateFlow)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     // Jetpack Media3 (ExoPlayer básico para todos los formatos)
     val media3Version = "1.3.1"
     implementation("androidx.media3:media3-exoplayer:$media3Version")

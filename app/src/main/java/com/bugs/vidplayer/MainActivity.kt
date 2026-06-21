@@ -22,29 +22,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import com.bugs.vidplayer.player.VideoPlayerViewModel
 import com.bugs.vidplayer.ui.PlayerScreen
 
 class MainActivity : ComponentActivity() {
 
-    // Instanciamos el motor de reproducción de manera segura
     private val videoViewModel: VideoPlayerViewModel by viewModels()
-
-    override fun bundleLayout() {} // Método auxiliar vacío si el compilador lo pide
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val context = LocalContext.current
 
-            // Determinar qué permisos se necesitan según la versión de Android corriendo en el dispositivo
+            // Determinar los permisos correspondientes según la versión de Android running
             val permissionsNeeded = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 arrayOf(Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_VIDEO)
             } else {
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
 
-            // Estado que controla si el acceso a los archivos fue concedido
+            // Estado para rastrear si los permisos fueron autorizados
             var hasPermission by remember {
                 mutableStateOf(
                     permissionsNeeded.all {
@@ -53,7 +49,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            // Lanzador interactivo de la ventana nativa de permisos de Android
+            // El launcher guarda la respuesta en el estado lógico booleano sin invocar elementos de UI aquí
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.RequestMultiplePermissions()
             ) { results ->
@@ -67,17 +63,14 @@ class MainActivity : ComponentActivity() {
                 contentAlignment = Alignment.Center
             ) {
                 if (hasPermission) {
-                    // Si tenemos permiso, iniciamos una lista de prueba vacía y cargamos el reproductor
+                    // Inicializa el motor de escaneo solo cuando los permisos son positivos
                     LaunchedEffect(Unit) {
-                        // Reemplaza la línea anterior por esta en tu MainActivity:
-                        LaunchedEffect(Unit) {
-                            videoViewModel.loadLocalMedia()
-                        }
-
+                        videoViewModel.loadLocalMedia()
                     }
+
+                    // LLAMADA CORRECTA: El elemento UI se invoca en el entorno Composable puro del contenedor Box
                     PlayerScreen(viewModel = videoViewModel)
                 } else {
-                    // Si no hay permiso, mostramos la interfaz informativa intermedia
                     Column(
                         modifier = Modifier.padding(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally

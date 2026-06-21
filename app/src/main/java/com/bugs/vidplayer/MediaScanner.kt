@@ -1,7 +1,5 @@
 package com.bugs.vidplayer
 
-class MediaScannerpackage com.bugs.vidplayer.data
-
 import android.content.ContentUris
 import android.content.Context
 import android.provider.MediaStore
@@ -64,6 +62,4 @@ class MediaScanner(private val context: Context) {
 
         return@withContext fileList
     }
-}
-{
 }
